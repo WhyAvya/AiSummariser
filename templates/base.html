@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}CosmoSummarizer{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+  <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block extra_styles %}{% endblock %}
+
+
+ 
+<style>
+
+  .pixel-menu {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+}
+
+.pixel-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #2e8b57; /* emerald green */
+  color: white;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  text-decoration: none;
+  border: 4px solid #112430;
+  box-shadow: 4px 4px 0 #112430;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+    border-radius: 16px; 
+}
+
+.pixel-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 2px 0 #7c7;
+  background: #3cb371;
+}
+
+.pixel-upload-form {
+  display: inline-block;
+}
+
+.pixel-upload-form input[type="file"] {
+  display: none;
+
+  @media (max-width: 768px) {
+  .pixel-menu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .pixel-button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+}
+
+
+</style>
+</head>
+
+<body>
+<nav class="pixel-nav">
+  <div class="nav-wrapper">
+    
+    <!-- Logo on far left -->
+    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="navbar-logo" />
+
+    <!-- Nav items on far right -->
+   <ul class="pixel-menu">
+  <li><a class="pixel-button" href="{{ url_for('home') }}">Home</a></li>
+  <li><a class="pixel-button" href="#main">Summarize</a></li>
+  <li>
+    <form action="/upload" method="post" enctype="multipart/form-data" class="pixel-upload-form">
+      <label for="document" class="pixel-button">Upload File</label>
+      <input type="file" id="document" name="document" accept=".txt,.pdf,.docx" required onchange="this.form.submit()">
+    </form>
+  </li>
+  <li><a class="pixel-button" href="{{ url_for('about') }}">About</a></li>
+  <li><a class="pixel-button" href="{{ url_for('feedback') }}">Feedback</a></li>
+</ul>
+
+  </div>
+</nav>
+
+
+
+ <!-- 🔊 Music Toggle Button -->
+{% if music_toggle %}
+  <audio id="bgm" loop>
+    <source src="{{ url_for('static', filename='sounds/bg.mp3') }}" type="audio/mpeg" />
+    Your browser does not support the audio element.
+  </audio>
+
+  <button onclick="toggleMusic()" class="music-toggle" aria-pressed="false" aria-label="Toggle background music" title="Toggle Music">
+    🎵 Music On
+  </button>
+{% endif %}
+
+  <!-- Page-specific content goes here -->
+  {% block content %}{% endblock %}
+
+  <!-- 🔗 Shared Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-section social-links">
+        <h4>Connect</h4>
+        <a href="https://x.com/axtrumx" target="_blank" rel="noopener" aria-label="Twitter">
+          <img src="{{ url_for('static', filename='images/Xicon.png') }}" alt="Twitter Icon" class="pixel-icon" /> X
+        </a>
+        <a href="https://github.com/WhyAvya" target="_blank" rel="noopener" aria-label="GitHub">
+          <img src="{{ url_for('static', filename='images/githubicon.png') }}" alt="GitHub Icon" class="pixel-icon" /> GitHub
+        </a>
+        <a href="https://linkedin.com/in/avyasharma" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <img src="{{ url_for('static', filename='images/linkedinicon.png') }}" alt="LinkedIn Icon" class="pixel-icon" /> LinkedIn
+        </a>
+        <a href="https://instagram.com/axtrumx" target="_blank" rel="noopener" aria-label="Instagram">
+          <img src="{{ url_for('static', filename='images/igicon.png') }}" alt="Instagram Icon" class="pixel-icon" /> Instagram
+        </a>
+        <a href="mailto:avya.sharma04@gmail.com" aria-label="Email">
+          <img src="{{ url_for('static', filename='images/mailicon.png') }}" alt="Email Icon" class="pixel-icon" /> Email
+        </a>
+      </div>
+
+      <div class="footer-section footer-links">
+        <h4>Links</h4>
+        <a href="#main">Summarize</a>
+        <a href="#rewardBox">Rewards</a>
+      </div>
+
+      <div class="footer-section footer-contact">
+        <h4>Contact</h4>
+        <p><a href="mailto:avya.sharma04@gmail.com">avya.sharma04@gmail.com</a></p>
+        <p>© 2025 CosmoSummarizer. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

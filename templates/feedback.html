@@ -1,0 +1,77 @@
+{% set music_toggle = true %}
+{% extends "base.html" %}
+
+{% block extra_styles %}
+  {{ super() }}
+  <link rel="stylesheet" href="{{ url_for('static', filename='feedback.css') }}">
+{% endblock %}
+
+{% block title %}Feedback | CosmoSummarizer ✨{% endblock %}
+
+{% block content %}
+<main class="feedback-container">
+  <section class="form-section">
+    <h2>💌 We’d Love Your Feedback!</h2>
+    <form method="post" action="/feedback">
+      <label for="name">Name (optional):</label>
+      <input type="text" id="name" name="name" placeholder="e.g., Player1">
+
+      <label for="email">Email (optional):</label>
+      <input type="email" id="email" name="email" placeholder="you@example.com">
+
+      <label for="experience">Overall Experience:</label>
+      <textarea id="experience" name="experience" rows="4" placeholder="Tell us what you think..."></textarea>
+
+      <label for="discovery">How did you discover us?</label>
+      <select id="discovery" name="discovery">
+        <option>Friend</option>
+        <option>Instagram</option>
+        <option>Search Engine</option>
+        <option>College Project</option>
+        <option>Other</option>
+      </select>
+
+      <label>Rate us:</label>
+      <div class="rating">
+        <label><input type="radio" name="rating" value="1"> 💔</label>
+        <label><input type="radio" name="rating" value="2"> ❤️</label>
+        <label><input type="radio" name="rating" value="3"> 💖</label>
+      </div>
+
+      <label for="suggestions">Any Suggestions?</label>
+      <textarea id="suggestions" name="suggestions" rows="3" placeholder="More features? Less bugs? Let us know!"></textarea>
+
+      <button type="submit">🚀 Submit</button>
+    </form>
+  </section>
+
+  <section class="faq-section">
+    <h3>📚 Need Help? FAQ Below 👇</h3>
+
+    <details>
+      <summary>📝 How can I summarise a document?</summary>
+      <p>Paste the content or upload a file via the "Upload File" section.</p>
+    </details>
+
+    <details>
+      <summary>📄 Can I upload PDFs?</summary>
+      <p>Yes! We currently support .txt and .docx, and PDF is coming soon.</p>
+    </details>
+
+    <details>
+      <summary>💸 Is this free to use?</summary>
+      <p>Yes! 100% free and made for students like you.</p>
+    </details>
+
+    <details>
+      <summary>🔐 What happens to my uploaded data?</summary>
+      <p>Nothing is stored. Your data is only used temporarily to generate summaries.</p>
+    </details>
+
+    <details>
+      <summary>🧠 Who built this?</summary>
+      <p>This project was built by a student as part of a digital literacy challenge!</p>
+    </details>
+  </section>
+</main>
+{% endblock %}

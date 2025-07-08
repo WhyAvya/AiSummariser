@@ -1,0 +1,286 @@
+/* =============== BASE RESET =============== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: #112430;
+  font-family: 'Press Start 2P', monospace;
+  color: khaki;
+}
+
+/* =============== NAVBAR =============== */
+.navbar {
+  background-color: #1a2f1d;
+  height: 80px; /* Fixed height for navbar */
+  display: flex;
+  align-items: center; /* Vertically center content */
+  justify-content: center; /* Horizontally center content */
+  border-bottom: 3px solid #77cc77;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  height: 100%; /* Make ul fill navbar height */
+  align-items: center; /* Center items vertically */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  display: inline-flex; /* Better for vertical alignment */
+  align-items: center;
+  height: 100%; /* Fill parent height */
+}
+
+.navbar a {
+  color: khaki;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  height: 100%; /* Fill parent height */
+  display: flex;
+  align-items: center; /* Center text vertically */
+}
+
+.navbar a:hover {
+  background-color: rgba(119, 204, 119, 0.2);
+}
+
+.navbar a.active {
+  background-color: #77cc77;
+  color: #112430;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(119, 204, 119, 0.7);
+}
+
+/* =============== MAIN LAYOUT =============== */
+.feedback-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* =============== FORM SECTION =============== */
+.form-section {
+  background-color: #142f1f;
+  padding: 25px;
+  border: 2px dashed #7c7;
+  border-radius: 10px;
+  box-shadow: 0 0 10px #7c7;
+}
+
+.form-section h2 {
+  color: #e9967a;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  color: #bdb76b;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  font-family: inherit;
+  background-color: #061826;
+  color: #f0e68c;
+  border: 2px solid #bdb76b;
+  border-radius: 5px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.rating {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  margin-top: 20px;
+  background-color: #77cc77;
+  color: #112430;
+  border: none;
+  padding: 12px 20px;
+  font-family: inherit;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #5cf;
+}
+
+/* =============== FAQ SECTION =============== */
+.faq-section {
+  background-color: #142f1f;
+  padding: 25px;
+  border: 2px solid #7c7;
+  border-radius: 10px;
+  box-shadow: 0 0 8px #77cc77;
+}
+
+.faq-section h3 {
+  text-align: center;
+  color: #e9967a;
+  margin-bottom: 20px;
+}
+
+details {
+  margin-bottom: 15px;
+  background-color: #061826;
+  padding: 12px;
+  border-radius: 5px;
+  border: 2px dashed #bdb76b;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+summary {
+  font-weight: bold;
+  color: #f0e68c;
+}
+
+details[open] summary {
+  color: #55ccff;
+}
+
+/* =============== FOOTER =============== */
+.footer-note {
+  background-color: #1a2f1d;
+  text-align: center;
+  color: #bdb76b;
+  padding: 20px 10px;
+  font-size: 12px;
+  border-top: 2px solid #77cc77;
+}
+
+.footer-note a {
+  color: #e9967a;
+  text-decoration: none;
+}
+
+
+
+
+/* MORE RESPONSIVE */
+/* 🔁 Universal Box Model Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 📱 Fluid Layout */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  font-family: 'Press Start 2P', monospace;
+  line-height: 1.6;
+}
+
+/* 🖼️ Images and Videos Scale Responsively */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 🧱 Containers - Responsive Width */
+.container,
+.page-container,
+.main-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* 🎛️ Flexbox Helper Classes */
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-center {
+  justify-content: center;
+  align-items: center;
+}
+
+/* 📱 Responsive Typography */
+h1, h2, h3, h4, h5, h6, p {
+  word-wrap: break-word;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+}
+
+/* 🧭 Responsive Navbar */
+.pixel-nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.pixel-nav ul li a {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  text-align: center;
+}
+
+/* 🔁 Media Query: Mobile Adjustments */
+@media (max-width: 768px) {
+  .pixel-nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .navbar-logo {
+    margin-bottom: 1rem;
+    max-width: 100px;
+  }
+
+  .controls button,
+  .option-group select {
+    width: 100%;
+  }
+
+  .text-container {
+    flex-direction: column;
+  }
+
+  .text-box {
+    width: 100% !important;
+  }
+}

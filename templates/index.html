@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Home | CosmoSummarizer{% endblock %}
+{% set music_toggle = true %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+  <h1>✨ Welcome to CosmoSummarizer ✨</h1>
+  <p>Your cozy pixel-themed Ai-based summariser. </p>
+  <p>Paste. Pick. Poof.</p>
+  <div class="hero-action">
+    <button onclick="document.getElementById('main').scrollIntoView({behavior: 'smooth'})">Start Summarizing</button>
+    <img src="{{ url_for('static', filename='images/marriage.png') }}" class="heroicon" alt="Hero Icon" />
+  </div>
+</section>
+
+<!-- Main Section -->
+<section id="main" class="main-container">
+  <form action="/summarize" method="POST">
+    <div class="text-container">
+      <div class="text-box">
+        <h3>📜 Original Text 
+          <span class="tooltip">❔
+            <span class="tooltip-text">Paste your text here to get a concise summary.</span>
+          </span>
+        </h3>
+        <textarea id="inputText" name="inputText" placeholder="Paste your text here..." required>{{ input_text or '' }}</textarea>
+      </div>
+
+      <div class="text-box">
+        <h3>✨ Summary 
+          <span class="tooltip">❔
+            <span class="tooltip-text">Your AI-generated summary appears here.</span>
+          </span>
+        </h3>
+        <div id="summaryBox">{{ summary }}</div>
+        <button type="button" onclick="copySummary()">📋 Copy</button>
+
+        <!-- Star Rating System -->
+        <div class="star-rating" aria-label="Rate summary">
+          <span class="star" data-value="1">&#9733;</span>
+          <span class="star" data-value="2">&#9733;</span>
+          <span class="star" data-value="3">&#9733;</span>
+          <span class="star" data-value="4">&#9733;</span>
+          <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <div id="ratingMessage" style="color: gold; margin-top: 5px;"></div>
+      </div>
+    </div>
+
+    <!-- Customization Options -->
+    <div class="options-container">
+      <div class="option-group">
+        <label for="tone">🎤 Tone:</label>
+        <select id="tone" name="tone">
+          <option value="formal">Formal</option>
+          <option value="casual">Casual</option>
+          <option value="friendly">Friendly</option>
+          <option value="humorous">Humorous</option>
+          <option value="analytical">Analytical</option>
+        </select>
+      </div>
+      <div class="option-group">
+        <label for="length">✍ Length:</label>
+        <select id="length" name="length">
+          <option value="short">Short</option>
+          <option value="medium">Medium</option>
+          <option value="long">Detailed</option>
+        </select>
+      </div>
+      <div class="option-group">
+        <label for="audience">🧠 Audience:</label>
+        <select id="audience" name="audience">
+          <option value="beginner">Beginner</option>
+          <option value="general">General Public</option>
+          <option value="expert">Expert</option>
+          <option value="social">Social Media</option>
+        </select>
+      </div>
+      <div class="option-group">
+        <label for="format">💾 Format:</label>
+        <select id="format" name="format">
+          <option value="paragraph">Paragraph</option>
+          <option value="bullet">Bulleted</option>
+          <option value="tweet">Tweet Thread</option>
+          <option value="podcast">Podcast Style</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <button type="submit">✨ Summarize</button>
+      <button type="button" onclick="clearForm()">🔁 Clear</button>
+    </div>
+  </form>
+
+  <!-- Hearts -->
+  <div class="hearts" aria-label="Free tries left">
+    <span class="heart-full pulse">❤</span>
+    <span class="heart-full pulse">❤</span>
+    <span class="heart-full pulse">❤</span>
+    <span class="heart-empty">♡</span>
+    <span class="heart-empty">♡</span>
+    <small>(Free tries regenerate every 5 mins)</small>
+  </div>
+
+  <div id="heartsNotification" role="alert" aria-live="assertive">
+    💖 Free tries replenished! Keep summarizing! 💖
+  </div>
+
+<!-- Avatar and XP Bar -->
+<div class="avatar-container boxy">
+  <img src="{{ url_for('static', filename='images/earth.gif') }}" alt="Pixel Scholar Avatar" class="avatar-img" />
+  <div class="xp-level-text">Level 7 - XP: 420/600</div>
+</div>
+
+
+  <!-- Pixel Coins -->
+  <div class="coin-display" aria-live="polite">
+    💰 Pixel Coins: 125 <small>(+10 coins earned!)</small>
+  </div>
+
+  <!-- Daily Quests -->
+  <div class="daily-quests" aria-live="polite" aria-label="Daily quests">
+    <strong>Daily Quests:</strong>
+    <ul>
+      <li>📝 Summarize 3 texts (1/3)</li>
+      <li>⭐ Rate 2 summaries (0/2)</li>
+      <li>🎯 Try advanced prompt (not started)</li>
+    </ul>
+  </div>
+</section>
+
+<!-- Reward Box -->
+<div class="reward-box" id="rewardBox" role="alert" aria-live="assertive">
+  🎉 Congratulations! You earned 50 Pixel Coins! 🎉
+  <button onclick="document.getElementById('rewardBox').style.display='none'">Close</button>
+</div>
+
+<!-- Sound Effects -->
+<audio id="sound-star" src="{{ url_for('static', filename='sounds/star.mp3') }}"></audio>
+<audio id="sound-heart" src="{{ url_for('static', filename='sounds/heart.mp3') }}"></audio>
+<audio id="sound-reward" src="{{ url_for('static', filename='sounds/review.mp3') }}"></audio>
+
+<script>
+  const stars = document.querySelectorAll('.star');
+  const ratingMessage = document.getElementById('ratingMessage');
+
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const rating = parseInt(star.getAttribute('data-value'));
+
+      stars.forEach(s => {
+        const val = parseInt(s.getAttribute('data-value'));
+        s.classList.toggle('selected', val <= rating);
+      });
+
+      ratingMessage.textContent = `You rated this summary ${rating} star${rating > 1 ? 's' : ''}!`;
+      setTimeout(() => ratingMessage.textContent = '', 3000);
+    });
+  });
+
+  let soundEnabled = true;
+
+  document.getElementById("soundToggle").addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    const icon = document.getElementById("soundToggle");
+    icon.textContent = soundEnabled ? "🔈" : "🔇";
+    icon.setAttribute("aria-pressed", soundEnabled);
+  });
+
+  function playSound(id) {
+    if (!soundEnabled) return;
+    const audio = document.getElementById(id);
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play();
+    }
+  }
+
+  document.querySelectorAll(".star-rating .star").forEach(star => {
+    star.addEventListener("click", () => playSound("sound-star"));
+  });
+
+  const heartsNote = document.getElementById("heartsNotification");
+  const observer = new MutationObserver(() => {
+    if (heartsNote.style.display !== "none") {
+      playSound("sound-heart");
+    }
+  });
+  observer.observe(heartsNote, { attributes: true, attributeFilter: ["style"] });
+
+  const rewardBox = document.getElementById("rewardBox");
+  rewardBox.addEventListener("transitionend", () => {
+    if (rewardBox.style.display !== "none") {
+      playSound("sound-reward");
+    }
+  });
+
+  if (rewardBox.style.display !== "none") {
+    playSound("sound-reward");
+  }
+
+  function copySummary() {
+    const summaryText = document.getElementById("summaryBox").innerText;
+    navigator.clipboard.writeText(summaryText).then(() => {
+      alert("Summary copied to clipboard!");
+    }).catch(err => {
+      alert("Failed to copy text.");
+    });
+  }
+
+  function handleFileUpload(input) {
+    const fileName = document.getElementById("fileName");
+    if (input.files.length > 0) {
+      fileName.textContent = input.files[0].name;
+      input.form.submit(); // Auto-submit
+    } else {
+      fileName.textContent = "No file chosen";
+    }
+  }
+
+  function clearForm() {
+    document.getElementById("inputText").value = "";
+    document.getElementById("summaryBox").innerHTML = "";
+    const stars = document.querySelectorAll(".star-rating .star");
+    stars.forEach(star => star.classList.remove("rated"));
+    document.getElementById("ratingMessage").innerText = "";
+  }
+</script>
+{% endblock %}
